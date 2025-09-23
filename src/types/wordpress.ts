@@ -20,6 +20,8 @@ export interface WordPressPost {
     author: Array<{
       id: number;
       name: string;
+      description?: string;
+      url?: string;
       avatar_urls: {
         '96': string;
       };

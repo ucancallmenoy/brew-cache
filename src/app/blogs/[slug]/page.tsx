@@ -1,15 +1,25 @@
 import { notFound } from 'next/navigation';
-import { getPostBySlug } from '@/lib/wordpress';
+import { headers } from 'next/headers';
 import BlogPost from '@/view/blog/BlogPost';
+import { fetchPostBySlug } from '@/hooks/wordpress/queries/useQuery';
 
 interface BlogPostPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = await getPostBySlug(params.slug);
+  const { slug } = await params;
+  
+  // Construct full base URL for server-side fetch
+  const headersList = await headers();
+  const host = headersList.get('host');
+  const protocol = headersList.get('x-forwarded-proto') || 'http';
+  const baseUrl = `${protocol}://${host}`;
+  
+  // Fetch post using the centralized function
+  const post = await fetchPostBySlug(slug, baseUrl);
 
   if (!post) {
     notFound();
@@ -18,7 +28,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return <BlogPost post={post} />;
 }
 
-// Generate static params for existing posts (optional)
 export async function generateStaticParams() {
   // This will run at build time to generate static pages
   // You can implement this to pre-generate pages for better performance

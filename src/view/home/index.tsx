@@ -5,6 +5,12 @@ export default function Home() {
     <div className="bg-background-light min-h-screen">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-secondary to-accent py-20 px-4">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-10 text-6xl animate-bounce delay-100">🍺</div>
+          <div className="absolute top-40 right-20 text-4xl animate-bounce delay-300">🍻</div>
+          <div className="absolute bottom-20 left-1/4 text-5xl animate-bounce delay-500">🥂</div>
+          <div className="absolute bottom-40 right-1/3 text-3xl animate-bounce delay-700">🍺</div>
+        </div>
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 font-serif">
             Welcome to{" "}

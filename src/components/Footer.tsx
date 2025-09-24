@@ -78,28 +78,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Categories */}
-          <div>
-            <h4 className="text-lg font-semibold text-white mb-4 font-serif">Categories</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/category/brewing-guides" className="text-white/80 hover:text-accent transition-colors duration-200 text-sm">
-                  Brewing Guides
-                </Link>
-              </li>
-              <li>
-                <Link href="/category/brewery-reviews" className="text-white/80 hover:text-accent transition-colors duration-200 text-sm">
-                  Beer Reviews
-                </Link>
-              </li>
-              <li>
-                <Link href="/category/food-pairings" className="text-white/80 hover:text-accent transition-colors duration-200 text-sm">
-                  Food Pairings
-                </Link>
-              </li>
-            </ul>
-          </div>
-
           {/* Newsletter Signup */}
           <div>
             <h4 className="text-lg font-semibold text-white mb-4 font-serif">Stay Updated</h4>

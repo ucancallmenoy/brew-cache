@@ -1,15 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { WordPressPost, WordPressCategory } from '@/types/wordpress';
-
-interface WordPressAuthor {
-  id: number;
-  name: string;
-  avatar_urls?: { [key: string]: string };
-  description?: string;
-  slug?: string;
-  link?: string;
-  // Add other fields as needed
-}
+import { WordPressPost, WordPressCategory, WordPressAuthor } from '@/types/wordpress';
 
 export const fetchPosts = async (): Promise<WordPressPost[]> => {
   const response = await fetch('/api/wordpress?action=getPosts');
@@ -28,6 +18,11 @@ export const fetchCategories = async (): Promise<WordPressCategory[]> => {
   const response = await fetch('/api/wordpress?action=getCategories');
   if (!response.ok) throw new Error('Failed to fetch categories');
   return response.json();
+};
+
+export const fetchCategoryBySlug = async (slug: string): Promise<WordPressCategory | null> => {
+  const categories = await fetchCategories();
+  return categories.find(cat => cat.slug === slug) || null;
 };
 
 export const fetchPostsByCategory = async (categoryId: string): Promise<WordPressPost[]> => {
@@ -53,6 +48,10 @@ export function usePostBySlug(slug: string) {
 
 export function useCategories() {
   return useQuery({ queryKey: ['categories'], queryFn: fetchCategories });
+}
+
+export function useCategoryBySlug(slug: string) {
+  return useQuery({ queryKey: ['category', slug], queryFn: () => fetchCategoryBySlug(slug) });
 }
 
 export function usePostsByCategory(categoryId: number) {

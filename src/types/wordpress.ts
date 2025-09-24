@@ -44,7 +44,9 @@ export interface WordPressCategory {
 export interface WordPressAuthor {
   id: number;
   name: string;
-  avatar_urls: {
-    '96': string;
-  };
+  avatar_urls?: { [key: string]: string };
+  description?: string;
+  slug?: string;
+  link?: string;
+  roles?: string[];
 }

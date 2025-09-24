@@ -1,9 +1,29 @@
 'use client';
+
 import Image from "next/image";
-import { useAuthors } from '@/hooks/wordpress';
+import { usePosts } from '@/hooks/wordpress';
+import { useMemo } from 'react';
 
 export default function About() {
-  const { data: authors = [], isLoading, error } = useAuthors();
+  const { data: posts = [], isLoading, error } = usePosts();
+
+  const authors = useMemo(() => {
+    const authorMap = new Map();
+    posts.forEach(post => {
+      if (post._embedded?.author?.[0]) {
+        const author = post._embedded.author[0];
+        if (!authorMap.has(author.id)) {
+          authorMap.set(author.id, author);
+        }
+      }
+    });
+    const uniqueAuthors = Array.from(authorMap.values());
+    return uniqueAuthors.sort((a, b) => {
+      if (a.name === "Patrick Perez") return -1;
+      if (b.name === "Patrick Perez") return 1;
+      return a.name.localeCompare(b.name);
+    });
+  }, [posts]);
 
   return (
     <div className="bg-background-light min-h-screen">
@@ -80,7 +100,7 @@ export default function About() {
               <div className="bg-accent/10 p-6 rounded-xl">
                 <p className="text-accent font-semibold mb-2">🍺 Fun Fact</p>
                 <p className="text-text-light">
-                  Our team has collectively tasted over 10,000 different beers from breweries across 50+ countries!
+                  Our team can drink beer all night!
                 </p>
               </div>
             </div>
@@ -108,9 +128,9 @@ export default function About() {
               <p className="text-text-light">Failed to load team members.</p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid gap-8 md:grid-cols-3">
               {authors.map((author) => (
-                <div key={author.id} className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-200 text-center">
+                <div key={author.id} className={`bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-200 text-center ${authors.length === 1 ? 'col-span-1 col-start-2' : ''}`}>
                   <div className="w-20 h-20 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
                     {author.avatar_urls?.['96'] ? (
                       <Image

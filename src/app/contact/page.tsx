@@ -43,9 +43,6 @@ export default function ContactPage() {
                 Subscribe
               </button>
             </div>
-            <p className="text-text-light text-sm mt-4">
-              Join 25,000+ beer enthusiasts. Unsubscribe anytime.
-            </p>
           </div>
         </div>
       </section>

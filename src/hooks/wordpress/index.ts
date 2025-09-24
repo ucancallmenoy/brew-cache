@@ -1,1 +1,1 @@
-export { usePosts, usePostBySlug, useCategories, usePostsByCategory, useAuthors } from './queries/useQuery';
+export { usePosts, usePostBySlug, useCategories, usePostsByCategory, useAuthors, useCategoryBySlug } from './queries/useQuery';

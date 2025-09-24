@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json(posts);
       }
       case 'getAuthors': {
-        const authors = await fetchFromWordPress('/users');
+        const authors = await fetchFromWordPress('/users?roles[]=administrator&roles[]=author&roles[]=editor&roles[]=contributor&roles[]=subscriber&per_page=100');
         return NextResponse.json(authors);
       }
       default:

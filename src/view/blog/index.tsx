@@ -25,7 +25,6 @@ export default function BlogView() {
       const category = categories.find(cat => cat.slug === categorySlug);
       if (category) {
         setSelectedCategory(category.id);
-        // Scroll to categories section only if we haven't scrolled yet
         if (!hasScrolled.current) {
           setTimeout(() => {
             document.getElementById('categories-section')?.scrollIntoView({ behavior: 'smooth' });

@@ -15,6 +15,7 @@ export default function BlogPost({ post }: BlogPostProps) {
   const imageSrc = media?.source_url;
   const { data: categories = [] } = useCategories();
   const [categoryName, setCategoryName] = useState<string>('');
+  const [shareMessage, setShareMessage] = useState<string>('');
 
   useEffect(() => {
     if (post.categories.length > 0) {
@@ -23,11 +24,39 @@ export default function BlogPost({ post }: BlogPostProps) {
     }
   }, [categories, post.categories]);
 
+  const handleShare = async () => {
+    const url = window.location.href;
+    const title = post.title.rendered;
+    const text = `Check out this post: ${title}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title,
+          text,
+          url,
+        });
+      } catch (error) {
+        console.error("Share failed:", error);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        setShareMessage("Link copied to clipboard!");
+        setTimeout(() => setShareMessage(''), 3000);
+      } catch (error) {
+        console.error("Failed to copy link:", error);
+        setShareMessage("Failed to copy link. Please copy manually: " + url);
+        setTimeout(() => setShareMessage(''), 5000);
+      }
+    }
+  };
+
   return (
     <div className="bg-background-light min-h-screen">
       {/* Simplified Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-secondary to-accent py-20 px-4 overflow-hidden">
-        {/* Animated Beer Background - kept as requested */}
+        {/* Animated Beer Background */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 text-6xl animate-bounce delay-100">🍺</div>
           <div className="absolute top-40 right-20 text-4xl animate-bounce delay-300">🍻</div>
@@ -124,24 +153,10 @@ export default function BlogPost({ post }: BlogPostProps) {
             <div className="flex items-center justify-between px-8 py-6 border-b border-gray-100">
               <div className="flex items-center gap-3 text-sm text-text">
                 <span className="font-medium">Share this post:</span>
+                {shareMessage && <span className="text-accent font-medium">{shareMessage}</span>}
               </div>
               <div className="flex items-center gap-3">
-                <button className="w-10 h-10 rounded-full bg-blue-50 hover:bg-blue-500 hover:text-white text-blue-500 flex items-center justify-center transition-all duration-300 hover:scale-110">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                  </svg>
-                </button>
-                <button className="w-10 h-10 rounded-full bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-600 flex items-center justify-center transition-all duration-300 hover:scale-110">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                  </svg>
-                </button>
-                <button className="w-10 h-10 rounded-full bg-red-50 hover:bg-red-500 hover:text-white text-red-500 flex items-center justify-center transition-all duration-300 hover:scale-110">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.219-5.160 1.219-5.160s-.219-.438-.219-1.085c0-1.016.219-1.775.219-1.775s.438-.657.876-.657c.438 0 .657.219.657.657 0 .438-.219.876-.219 1.314 0 1.095.876 1.971 1.971 1.971 1.533 0 2.628-1.533 2.628-3.723 0-1.533-1.095-2.628-2.847-2.628-2.190 0-3.723 1.533-3.723 3.723 0 .657.219 1.314.657 1.971.219.219.219.438.219.657-.219.438-.657.438-.876.219-.438-.219-.657-.657-.876-1.095-.219-.657-.438-1.533-.438-2.409 0-2.847 2.190-5.474 6.132-5.474 3.284 0 5.255 2.190 5.255 4.380 0 2.847-1.533 4.599-3.723 4.599-.657 0-1.314-.438-1.533-.876 0 0-.438 1.533-.657 1.971-.219.657-.657 1.314-1.095 1.971C9.779 23.199 10.874 23.418 12.017 23.418c6.624 0 11.99-5.367 11.99-11.99C24.007 5.367 18.641.001 12.017.001z"/>
-                  </svg>
-                </button>
-                <button className="w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-500 hover:text-white text-gray-500 flex items-center justify-center transition-all duration-300 hover:scale-110">
+                <button onClick={handleShare} className="w-10 h-10 rounded-full bg-gray-50 hover:bg-gray-500 cursor-pointer hover:text-white text-gray-500 flex items-center justify-center transition-all duration-300 hover:scale-110">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                   </svg>

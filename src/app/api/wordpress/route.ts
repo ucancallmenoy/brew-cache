@@ -1,21 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-const WORDPRESS_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL;
-
-// Helper function to fetch from WordPress API
-async function fetchFromWordPress(endpoint: string) {
-  const response = await fetch(`${WORDPRESS_API_URL}${endpoint}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    cache: 'no-cache',
-  });
-  if (!response.ok) {
-    throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
-  }
-  return response.json();
-}
+import { fetchFromWordPress } from '@/lib/wordpress';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);

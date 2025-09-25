@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation';
-import { headers } from 'next/headers';
 import BlogPost from '@/view/blog/BlogPost';
-import { fetchPostBySlug, fetchPosts } from '@/hooks/wordpress/queries/useQuery';
-
+import { fetchFromWordPress } from '@/lib/wordpress'; 
+import type { WordPressPost } from '@/types/wordpress';  
 interface BlogPostPageProps {
   params: Promise<{
     slug: string;
@@ -13,14 +12,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   
   try {
-    // Construct full base URL for server-side fetch
-    const headersList = await headers();
-    const host = headersList.get('host');
-    const protocol = headersList.get('x-forwarded-proto') || 'http';
-    const baseUrl = `${protocol}://${host}`;
-    
-    // Fetch post using the centralized function
-    const post = await fetchPostBySlug(slug, baseUrl);
+    const posts = await fetchFromWordPress(`/posts?slug=${slug}&_embed`);
+    const post = posts.length > 0 ? posts[0] : null;
     
     if (!post) {
       notFound();
@@ -35,9 +28,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
 export async function generateStaticParams() {
   try {
-    // Fetch all posts to generate static paths
-    const posts = await fetchPosts();
-    return posts.map((post) => ({
+    // Fetch posts directly from WordPress for static generation
+    const posts = await fetchFromWordPress('/posts?_embed&per_page=100');
+    return posts.map((post: WordPressPost) => ({
       slug: post.slug,
     }));
   } catch (error) {

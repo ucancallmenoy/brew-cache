@@ -30,7 +30,9 @@ export async function GET(request: NextRequest) {
       case 'getPostBySlug': {
         const slug = searchParams.get('slug');
         if (!slug) return NextResponse.json({ error: 'Slug required' }, { status: 400 });
+        console.log('Fetching slug:', slug);
         const posts = await fetchFromWordPress(`/posts?slug=${slug}&_embed`);
+        console.log('Posts found:', posts.length);
         const post = posts.length > 0 ? posts[0] : null;
         return NextResponse.json(post);
       }

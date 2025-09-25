@@ -1,11 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="bg-background-light min-h-screen">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary via-secondary to-accent py-20 px-4">
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
           <div className="absolute top-20 left-10 text-6xl animate-bounce delay-100">🍺</div>
           <div className="absolute top-40 right-20 text-4xl animate-bounce delay-300">🍻</div>
           <div className="absolute bottom-20 left-1/4 text-5xl animate-bounce delay-500">🥂</div>
@@ -20,12 +21,12 @@ export default function Home() {
             Your ultimate destination for craft beer stories, brewing insights, and beer culture chronicles.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-accent hover:bg-accent/90 text-primary px-8 py-4 rounded-full font-medium text-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+            <Link href="/beers" className="bg-accent hover:bg-accent/90 text-primary px-8 py-4 rounded-full font-medium text-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 cursor-pointer inline-block text-center">
               Explore Beers
-            </button>
-            <button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-4 rounded-full font-medium text-lg transition-all duration-200">
+            </Link>
+            <Link href="/blogs" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-4 rounded-full font-medium text-lg transition-all duration-200 hover:shadow-xl hover:scale-105 cursor-pointer inline-block text-center">
               Latest Reviews
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -102,12 +103,12 @@ export default function Home() {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full font-medium transition-all duration-200 shadow-lg hover:shadow-xl">
+                <Link href="/blogs" className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full font-medium transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 cursor-pointer inline-block text-center">
                   Start Exploring
-                </button>
-                <button className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-full font-medium transition-all duration-200">
-                  View Latest Reviews
-                </button>
+                </Link>
+                <Link href="/subscribe" className="border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-full font-medium transition-all duration-200 hover:shadow-xl hover:scale-105 cursor-pointer inline-block text-center">
+                  Be a Beer Contributor
+                </Link>
               </div>
 
               {/* Stats */}

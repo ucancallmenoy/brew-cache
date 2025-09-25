@@ -283,9 +283,9 @@ export default function BlogPost({ post }: BlogPostProps) {
                 View All Posts
               </Link>
               
-              <button className="bg-accent hover:bg-accent/90 text-primary px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
+              <Link href="/subscribe" className="bg-accent hover:bg-accent/90 text-primary px-8 py-4 rounded-full cursor-pointer font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 inline-block text-center">
                 Subscribe for Updates
-              </button>
+              </Link>
             </div>
           </div>
         </div>

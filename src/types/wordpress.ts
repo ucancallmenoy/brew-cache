@@ -50,3 +50,21 @@ export interface WordPressAuthor {
   link?: string;
   roles?: string[];
 }
+
+export interface WordPressPage {
+  id: number;
+  date: string;
+  slug: string;
+  status: string;
+  title: { rendered: string };
+  content: { rendered: string };
+  excerpt?: { rendered?: string };
+  author?: number;
+  _embedded?: {
+    author?: Array<{
+      id: number;
+      name: string;
+      avatar_urls?: { [key: string]: string };
+    }>;
+  };
+}

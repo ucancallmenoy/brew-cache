@@ -34,6 +34,14 @@ export async function GET(request: NextRequest) {
         const post = posts.length > 0 ? posts[0] : null;
         return NextResponse.json(post);
       }
+      case 'getPageBySlug': {
+        const slug = searchParams.get('slug');
+        if (!slug) return NextResponse.json({ error: 'Slug required' }, { status: 400 });
+        // request page with embed if available
+        const pages = await fetchFromWordPress(`/pages?slug=${slug}&_embed`);
+        const page = pages.length > 0 ? pages[0] : null;
+        return NextResponse.json(page);
+      }
       case 'getCategories': {
         const categories = await fetchFromWordPress('/categories');
         return NextResponse.json(categories);

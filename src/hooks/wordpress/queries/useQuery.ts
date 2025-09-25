@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { WordPressPost, WordPressCategory, WordPressAuthor } from '@/types/wordpress';
+import { WordPressPost, WordPressCategory, WordPressAuthor, WordPressPage } from '@/types/wordpress';
 
 export const fetchPosts = async (): Promise<WordPressPost[]> => {
   const response = await fetch('/api/wordpress?action=getPosts');
@@ -12,6 +12,13 @@ export const fetchPostBySlug = async (slug: string, baseUrl?: string): Promise<W
   const response = await fetch(url);
   if (!response.ok) throw new Error('Failed to fetch post');
   return response.json();
+};
+
+export const fetchPageBySlug = async (slug: string, baseUrl?: string): Promise<WordPressPage | null> => {
+  const url = baseUrl ? `${baseUrl}/api/wordpress?action=getPageBySlug&slug=${slug}` : `/api/wordpress?action=getPageBySlug&slug=${slug}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error('Failed to fetch page');
+  return response.json() as Promise<WordPressPage | null>;
 };
 
 export const fetchCategories = async (): Promise<WordPressCategory[]> => {
@@ -60,4 +67,8 @@ export function usePostsByCategory(categoryId: number) {
 
 export function useAuthors() {
   return useQuery({ queryKey: ['authors'], queryFn: fetchAuthors });
+}
+
+export function usePageBySlug(slug: string) {
+  return useQuery<WordPressPage | null>({ queryKey: ['page', slug], queryFn: () => fetchPageBySlug(slug) });
 }

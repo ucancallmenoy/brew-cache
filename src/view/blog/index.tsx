@@ -14,6 +14,11 @@ export default function BlogView() {
   const searchParams = useSearchParams();
   const hasScrolled = useRef(false);
 
+  // Newsletter state
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [isNewsletterSubmitting, setIsNewsletterSubmitting] = useState(false);
+  const [newsletterMessage, setNewsletterMessage] = useState('');
+
   useEffect(() => {
     const categorySlug = searchParams.get('category');
     if (categorySlug && categories.length > 0) {
@@ -38,6 +43,31 @@ export default function BlogView() {
       setTimeout(() => {
         document.getElementById('categories-section')?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
+    }
+  };
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsNewsletterSubmitting(true);
+    setNewsletterMessage('');
+
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: newsletterEmail }),
+      });
+
+      if (response.ok) {
+        setNewsletterMessage('Your email has sent to the administrator, wait for confirmation if you are qualified to brew some cache!');
+        setNewsletterEmail('');
+      } else {
+        setNewsletterMessage('Oops! Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      setNewsletterMessage('Oops! Something went wrong. Please try again.');
+    } finally {
+      setIsNewsletterSubmitting(false);
     }
   };
 
@@ -136,16 +166,26 @@ export default function BlogView() {
             </p>
             
             <div className="max-w-lg mx-auto">
-              <div className="flex flex-col sm:flex-row gap-4">
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4">
                 <input 
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
                   className="flex-1 rounded-full px-6 py-4 bg-white/20 backdrop-blur-sm placeholder-white/70 text-white outline-none focus:ring-2 focus:ring-accent border border-white/30 focus:border-white/50 transition-all duration-300" 
                   placeholder="Enter your email address" 
                   type="email" 
+                  required
                 />
-                <button className="bg-accent hover:bg-accent/90 text-primary rounded-full px-8 py-4 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap">
-                  Subscribe Now
+                <button 
+                  type="submit"
+                  disabled={isNewsletterSubmitting}
+                  className="bg-accent hover:bg-accent/90 text-primary rounded-full px-8 py-4 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  {isNewsletterSubmitting ? 'Subscribing...' : 'Subscribe Now'}
                 </button>
-              </div>
+              </form>
+              {newsletterMessage && (
+                <p className="mt-4 text-center text-sm font-medium text-accent">{newsletterMessage}</p>
+              )}
             </div>
           </div>
         </div>

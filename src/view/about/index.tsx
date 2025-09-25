@@ -1,6 +1,7 @@
 'use client';
 
 import Image from "next/image";
+import Link from "next/link";
 import { usePosts } from '@/hooks/wordpress';
 import { useMemo } from 'react';
 
@@ -191,12 +192,12 @@ export default function About() {
               Ready to explore the world of craft beer? Join thousands of beer enthusiasts discovering their next favorite brew.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-accent hover:bg-accent/90 text-primary px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
+              <Link href="/blogs" className="bg-accent hover:bg-accent/90 text-primary px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 inline-block text-center">
                 Start Exploring
-              </button>
-              <button className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border-2 border-white/30 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300">
-                Subscribe for Updates
-              </button>
+              </Link>
+              <Link href="/beers" className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border-2 border-white/30 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 inline-block text-center">
+                Explore Beers Collection
+              </Link>
             </div>
           </div>
         </div>

@@ -99,7 +99,7 @@ export default function About() {
                 We are on a mission to democratize craft beer knowledge, making it accessible for everyone from casual drinkers to aspiring brewers. Through our platform, we aim to preserve brewing traditions while fostering innovation in the craft beer world.
               </p>
               <div className="bg-accent/10 p-6 rounded-xl">
-                <p className="text-accent font-semibold mb-2">🍺 Fun Fact</p>
+                <p className="text-accent font-semibold mb-2">Fun Fact</p>
                 <p className="text-text-light">
                   Our team can drink beer all night!
                 </p>
